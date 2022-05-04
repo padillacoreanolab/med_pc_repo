@@ -1,3 +1,9 @@
+# Directories
+data/
+bin/
+env/
+old/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
