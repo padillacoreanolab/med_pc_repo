@@ -61,7 +61,7 @@ def get_med_pc_meta_data(file_path, meta_data_headers=None, file_path_to_meta_da
         file_path_to_meta_data = defaultdict(dict)
 
     # Going through each line of the MED-PC data file
-    with open(file_path) as file:
+    with open(file_path, 'rb') as file:
         for line in file.readlines():
             # Going through each header to see which line starts with the header
             for header in meta_data_headers:
@@ -76,7 +76,6 @@ def main():
     """
     Main function that runs when the script is run
     """
-    pass
 
 if __name__ == '__main__': 
     main()
