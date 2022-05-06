@@ -43,6 +43,7 @@ def get_med_pc_meta_data(file_path, meta_data_headers=None, file_path_to_meta_da
             - The path to the MED-PC data file 
         meta_data_headers: list
             - List of the types of metadata to be parsed out for
+            - Default metadata includes: "File", "Start Date", "End Date", "Subject", "Experiment", "Group", "Box", "Start Time", "End Time", "MSN"
         file_path_to_meta_data: Nested Default Dictionary
             - Any dictionary that has already been produced by this function that more metadata is chosen to be added to.
             The dictionary will have the file path as the key, and the meta data headers as the values. 
@@ -70,6 +71,40 @@ def get_med_pc_meta_data(file_path, meta_data_headers=None, file_path_to_meta_da
                     file_path_to_meta_data[file_path][header] = line.strip().replace(header, '').strip(":").strip()
                     # Move onto next line if header is found
                     break
+    return file_path_to_meta_data
+
+def get_all_med_pc_meta_data_from_files(list_of_files, meta_data_headers=None, file_path_to_meta_data=None):
+    """
+    Iterates through a list of MED-PC files to extract all the metadata from those files
+
+    Args:
+        list_of_files: list
+            - A list of file paths(not names, must be relative or absolute path) of MED-PC output files
+            - We recommend using glob.glob("./path_to_files/*txt") to get list of files
+        meta_data_headers: list
+            - List of the types of metadata to be parsed out for
+            - Default metadata includes: "File", "Start Date", "End Date", "Subject", "Experiment", "Group", "Box", "Start Time", "End Time", "MSN"
+        file_path_to_meta_data: Nested Default Dictionary
+            - Any dictionary that has already been produced by this function that more metadata is chosen to be added to.
+            The dictionary will have the file path as the key, and the meta data headers as the values. 
+            And then the meta data headers are the nested keys, and the meta data as the values.
+    
+    Returns:
+        Nested Default Dictionary:
+            - With the file path as the key, and the meta data headers as the values. 
+            And then the meta data headers are the nested keys, and the meta data as the values.
+    """
+    # Creating a new dictionary if none is inputted
+    if file_path_to_meta_data is None:
+        file_path_to_meta_data = defaultdict(dict)
+    
+    for file_path in list_of_files:
+        # Parsing out the metadata from MED-PC files
+        try:
+            file_path_to_meta_data = get_med_pc_meta_data(file_path=file_path, meta_data_headers=meta_data_headers, file_path_to_meta_data=file_path_to_meta_data)
+        # Except in case file can not be read or is missing
+        except:
+            print("Please review contents of {}".format(file_path))
     return file_path_to_meta_data
 
 def main():
