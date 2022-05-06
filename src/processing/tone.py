@@ -5,6 +5,7 @@ Functions for processing tone information from MED-PC's output
 For more information on the MED-PC's programming language, Trans: 
 - https://www.med-associates.com/wp-content/uploads/2017/01/DOC-003-R3.4-SOF-735-MED-PC-IV-PROGRAMMER%E2%80%99S-MANUAL.pdf
 """
+from collections import defaultdict
 
 def get_max_tone_number(tone_pd_series):
     """
@@ -50,6 +51,24 @@ def get_valid_tones(tone_pd_series, drop_1000s=True, dropna=True):
         tone_pd_series = tone_pd_series[:max_tone_index]
     # Removing all numbers that are after the max tone
     return tone_pd_series
+
+def get_first_port_entries(tone_pd_series, port_entries_pd_series):
+    """
+    TODO: ADD DOC STRING
+    """
+    # Creating a dictionary of index(current row number we're on) to current/next tone time and first port entry
+    latency_dict = defaultdict(dict)
+    for index, current_tone_time in tone_pd_series.items():
+        # Using a counter so that we don't go through all the rows that include NaNs
+        try:
+            latency_dict[index]["current_tone_time"] = current_tone_time
+            # Getting all the port entries that happened after the tone started
+            # And then getting the first one of those port entries
+            first_port_entry_after_tone = port_entries_pd_series[port_entries_pd_series >= current_tone_time].min()
+            latency_dict[index]["first_port_entry_after_tone"] = first_port_entry_after_tone
+        except:
+            print("Look over value {} at index {}".format(current_tone_time, index))
+    return latency_dict
 
 def main():
     """
