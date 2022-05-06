@@ -13,6 +13,7 @@ def get_first_key_from_dictionary(input_dictionary):
 
     Args:
         input_dictionary: dict
+            - A dictionary that you want to get the first key from
     
     Returns:
         str (usually)
