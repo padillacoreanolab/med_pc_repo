@@ -74,17 +74,25 @@ def get_first_port_entries(tone_pd_series, port_entries_pd_series):
 def get_concatted_first_porty_entry_dataframe(file_path_to_medpc_data, medpc_key="medpc_df", tone_time_column="(S)CSpresentation", \
         port_entry_column="(P)Portentry", stop_with_error=False):
     """
-        Removes all unnecessary numbers from a Pandas Series of tone times extracted from MED-PC's dataframe.
-    The unnecessary numbers are added after recorded tone times. These numbers are usually divisible by 1000. 
-    NaNs are also added after that. So we will remove all tone times entries that meet either of these criterias.
-    TODO: EDIT HERE
+    Creates dataframes of the time of the tone, and the first port entry after that tone.
+    Along with the corresponding metadata of the path of the file, the date, and the subject.
+    TODO: Fill out the rest of the args
     Args:
-        file_path_to_medpc_data, medpc_key="medpc_df", tone_time_column="(S)CSpresentation", \
-        port_entry_column="(P)Portentry", stop_with_error=False
+        file_path_to_medpc_data: dict 
+            - 
+        medpc_key: str
+            -  
+        tone_time_column: str
+            - 
+        port_entry_column: str
+            -             
+        stop_with_error: bool
+            - Flag to terminate the program when an error is raised.
+            - Sometimes MED-PC files have incorrect formatting, so can be skipped over.
     
     Returns: 
         Pandas Dataframe
-            - The tone times with unnecessary numbers and NaNs removed
+            -
     """
     # List to combine all the Data Frames at the end
     all_first_port_entry_df = []

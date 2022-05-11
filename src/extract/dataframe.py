@@ -7,6 +7,7 @@ For more information on the MED-PC's programming language, Trans:
 """
 from collections import defaultdict
 import traceback
+import pandas as pd 
 from medpc2excel.medpc_read import medpc_read
 
 def get_first_key_from_dictionary(input_dictionary):
@@ -50,8 +51,7 @@ def get_medpc_dataframe_from_list_of_files(medpc_files, stop_with_error=False):
     """
     Gets the dataframe from the output from medpc2excel.medpc_read that extracts data from a MED-PC file.
     This is done with multiple files from a list. And the date and the subject of the recording session is extracted as well.
-    Everything is stored in a nested dictionary of file path keys to the values "date_key", "subject_key", "medpc_df". 
-    Which are the keys to corresponding date, subject name, and MED-PD dataframe.
+    The data and subject metadata are added to the dataframe. And then all the dataframes for all the files are combined.
 
     Args:
         medpc_files: list
@@ -60,20 +60,21 @@ def get_medpc_dataframe_from_list_of_files(medpc_files, stop_with_error=False):
             - Flag to terminate the program when an error is raised.
             - Sometimes MED-PC files have incorrect formatting, so can be skipped over.
     Returns:
-        file_path_to_medpc_data
-            - A nested dictionary of file path keys to the values "date_key", "subject_key", "medpc_df". 
-            Which are the keys to corresponding date, subject name, and MED-PD dataframe.
+        Pandas DataFrame
+            - Combined MED-PC DataFrame for all the files with the corresponding date and subject.
     """
-    file_path_to_medpc_data = defaultdict(dict)
+    # List to combine all the Data Frames at the end
+    all_medpc_df = []    
     for file_path in medpc_files:
         try:
             # Reading in the MED-PC log file
             ts_df, medpc_log = medpc_read(file=file_path, override=True, replace=False)
             # Extracting the corresponding MED-PC Dataframe, date, and subject ID
             date_key, subject_key, medpc_df = get_medpc_dataframe_from_medpc_read_output(medpc_read_dictionary_output=ts_df)
-            file_path_to_medpc_data[file_path]["date_key"] = date_key
-            file_path_to_medpc_data[file_path]["subject_key"] = subject_key
-            file_path_to_medpc_data[file_path]["medpc_df"] = medpc_df
+            medpc_df["date_key"] = date_key
+            medpc_df["subject_key"] = subject_key
+            medpc_df["file_path"] = file_path
+            all_medpc_df.append(medpc_df)
         except Exception: 
             # Printing out error messages and the corresponding traceback
             print(traceback.format_exc())
@@ -83,7 +84,7 @@ def get_medpc_dataframe_from_list_of_files(medpc_files, stop_with_error=False):
             else:
                 # Continuing with execution
                 print("Invalid Formatting for file: {}".format(file_path))
-    return file_path_to_medpc_data
+    return pd.concat(all_medpc_df)
 
 def main():
     """
