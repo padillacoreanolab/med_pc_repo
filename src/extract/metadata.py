@@ -61,14 +61,20 @@ def get_med_pc_meta_data(file_path, meta_data_headers=None, file_path_to_meta_da
     if file_path_to_meta_data is None:
         file_path_to_meta_data = defaultdict(dict)
 
+    # List of all the headers that we've gone through
+    used_headers = []
     # Going through each line of the MED-PC data file
     with open(file_path, 'r') as file:
         for line in file.readlines():
+            # Checking to see if we've gone through all the headers or not
+            if set(meta_data_headers) == set(used_headers):
+                break
             # Going through each header to see which line starts with the header
             for header in meta_data_headers:
                 if line.strip().startswith(header):
                     # Removing all unnecessary characters
                     file_path_to_meta_data[file_path][header] = line.strip().replace(header, '').strip(":").strip()
+                    used_headers.append(header)
                     # Move onto next line if header is found
                     break
     return file_path_to_meta_data
