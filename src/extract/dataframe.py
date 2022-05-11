@@ -42,10 +42,10 @@ def get_medpc_dataframe_from_medpc_read_output(medpc_read_dictionary_output):
             - The subject key to the medpc2excel.medpc_read
             - The dataframe extracted from the MED-PC file
     """
-    date_key = get_first_key_from_dictionary(input_dictionary=medpc_read_dictionary_output)
-    subject_key = get_first_key_from_dictionary(input_dictionary=medpc_read_dictionary_output[date_key])
+    date = get_first_key_from_dictionary(input_dictionary=medpc_read_dictionary_output)
+    subject = get_first_key_from_dictionary(input_dictionary=medpc_read_dictionary_output[date])
     # Dataframe must use both the date and subject key with the inputted dictionary
-    return date_key, subject_key, medpc_read_dictionary_output[date_key][subject_key]
+    return date, subject, medpc_read_dictionary_output[date][subject]
 
 def get_medpc_dataframe_from_list_of_files(medpc_files, stop_with_error=False):
     """
@@ -70,9 +70,9 @@ def get_medpc_dataframe_from_list_of_files(medpc_files, stop_with_error=False):
             # Reading in the MED-PC log file
             ts_df, medpc_log = medpc_read(file=file_path, override=True, replace=False)
             # Extracting the corresponding MED-PC Dataframe, date, and subject ID
-            date_key, subject_key, medpc_df = get_medpc_dataframe_from_medpc_read_output(medpc_read_dictionary_output=ts_df)
-            medpc_df["date_key"] = date_key
-            medpc_df["subject_key"] = subject_key
+            date, subject, medpc_df = get_medpc_dataframe_from_medpc_read_output(medpc_read_dictionary_output=ts_df)
+            medpc_df["date"] = date
+            medpc_df["subject"] = subject
             medpc_df["file_path"] = file_path
             all_medpc_df.append(medpc_df)
         except Exception: 

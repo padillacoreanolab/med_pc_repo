@@ -55,7 +55,18 @@ def get_valid_tones(tone_pd_series, drop_1000s=True, dropna=True):
 
 def get_first_port_entries(tone_pd_series, port_entries_pd_series):
     """
-    TODO: ADD DOC STRING
+    From an array of times of tones being played and subject's entries to a port, 
+    finds the first entry immediately after every tone. 
+    Makes a dataframe of tone times to first port entry times
+
+    Args:
+        tone_pd_series: Pandas Series
+            - All the times the tone is being played
+        port_entries_pd_series: Pandas Series
+            - All the times that the port is being entered
+    Returns: 
+        Pandas DataFrame
+            - A dataframe of tone times to first port entry times
     """
     # Creating a dictionary of index(current row number we're on) to current/next tone time and first port entry
     first_port_entry_dict = defaultdict(dict)
@@ -69,27 +80,32 @@ def get_first_port_entries(tone_pd_series, port_entries_pd_series):
             first_port_entry_dict[index]["first_port_entry_after_tone"] = first_port_entry_after_tone
         except:
             print("Look over value {} at index {}".format(current_tone_time, index))
-    return first_port_entry_dict
+    return pd.DataFrame.from_dict(first_port_entry_dict, orient="index")
 
 def get_concatted_first_porty_entry_dataframe(concatted_medpc_df, tone_time_column="(S)CSpresentation", \
-        port_entry_column="(P)Portentry", subject_key_column="subject_key", date_key_column="date_key", \
+        port_entry_column="(P)Portentry", subject_column="subject", date_column="date", \
         stop_with_error=False):
     """
     Creates dataframes of the time of the tone, and the first port entry after that tone.
     Along with the corresponding metadata of the path of the file, the date, and the subject.
-    TODO: Fill out the rest of the args
+    This is created from a dataframe that contains tone times, port entry times, and associated metadata.
+    Which is usually from the extract.dataframe.get_medpc_dataframe_from_list_of_files function 
+
     Args:
-        file_path_to_medpc_data: dict 
-            - 
-        medpc_key: str
-            -  
+        concatted_medpc_df: Pandas Dataframe 
+            - Output of extract.dataframe.get_medpc_dataframe_from_list_of_files
+            - Includes tone playing time, port entry time, subject, and date for each recording session
         tone_time_column: str
-            - 
+            - Name of the column of concatted_medpc_df that has the array port entry times
         port_entry_column: str
-            -             
+            - Name of the column of concatted_medpc_df that has the array port entry times
+        subject_column: str
+            - Name of the column of concatted_medpc_df that has the subject's ID
+        date_column: str
+            - Name of the column of concatted_medpc_df that has the date of the recording
         stop_with_error: bool
             - Flag to terminate the program when an error is raised.
-            - Sometimes MED-PC files have incorrect formatting, so can be skipped over.
+            - Sometimes recordings can be for testing and don't include any valid tone times
     
     Returns: 
         Pandas Dataframe
@@ -103,16 +119,14 @@ def get_concatted_first_porty_entry_dataframe(concatted_medpc_df, tone_time_colu
         # Sometimes the valid tones do not exist because it was a test recording
         if not valid_tones.empty:
             # All the first port entries for each tone            
-            first_port_entry_dict = get_first_port_entries(tone_pd_series=valid_tones, port_entries_pd_series=current_file_df[port_entry_column])
-            # Turning the dictionary into a Data Frame
-            first_port_entry_df = pd.DataFrame.from_dict(first_port_entry_dict, orient="index")
+            first_port_entry_df = get_first_port_entries(tone_pd_series=valid_tones, port_entries_pd_series=current_file_df[port_entry_column])
             # Adding the metadata as columns
             first_port_entry_df["file_path"] = file_path
             # Making sure that there is only one date and subject for all the rows
-            if len(current_file_df[date_key_column].unique()[0]) == 1 and len(current_file_df[subject_key_column].unique()[0]) == 1:
+            if len(current_file_df[date_column].unique()) == 1 and len(current_file_df[subject_column].unique()) == 1:
                 # This assumes that all the date and subject keys are the same for the file
-                first_port_entry_df[date_key_column] = current_file_df[date_key_column].unique()[0]
-                first_port_entry_df[subject_key_column] = current_file_df[subject_key_column].unique()[0]
+                first_port_entry_df[date_column] = current_file_df[date_column].unique()[0]
+                first_port_entry_df[subject_column] = current_file_df[subject_column].unique()[0]
             elif stop_with_error:
                 raise ValueError("More then one date or subject in {}".format(file_path))
             else:
@@ -122,7 +136,8 @@ def get_concatted_first_porty_entry_dataframe(concatted_medpc_df, tone_time_colu
             raise ValueError("No valid tones for {}".format(file_path))
         else:
             print("No valid tones for {}".format(file_path))
-    return pd.concat(all_first_port_entry_df)
+    # Index repeats itself because it is concatenated with multiple dataframes
+    return pd.concat(all_first_port_entry_df).reset_index(drop="True")
 
 def main():
     """
