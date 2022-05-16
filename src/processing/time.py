@@ -47,6 +47,33 @@ def get_all_port_entry_increments(port_entry_scaled, port_exit_scaled):
     all_port_entry_ranges = [np.arange(port_entry, port_exit+1) for port_entry, port_exit in zip(port_entry_scaled, port_exit_scaled)]
     return np.concatenate(all_port_entry_ranges)
 
+def get_inside_port_mask(inside_port_numbers, max_time):
+    """
+    Gets a mask of all the times that the subject is inside the port. 
+    First a range of number from 1 to the number for the max time is created.
+    Then, a mask is created by seeing which numbers are within the inside port duration
+
+    Args:
+        max_time: int
+            - The number that represents the largest number for the time. 
+                - Usually this will be the number for the last tone played.  
+            - We recommend adding 2001 if you are just using the number for the last tone played
+                - This is because we are looking 20 seconds before and after. 
+                - And 20 seconds becomes 2000 when scaled with our method.
+        inside_port_numbers: Numpy Array
+            - All the increments of of the duration that the subject is within the port
+    Returns: 
+        session_time_increments: Numpy Array
+            - Range of number from 1 to max time 
+        inside_port_mask: Numpy Array
+            - The mask of True or False if the subject is in the port during the time of that index
+    """
+    if max_time is None:
+        max_time = inside_port_numbers.max()
+    session_time_increments = np.arange(1, max_time+1)
+    inside_port_mask = np.isin(session_time_increments, inside_port_numbers)
+    return session_time_increments, inside_port_mask
+
 def main():
     """
     Main function that runs when the script is run
