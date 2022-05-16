@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Functions for processing tone information from MED-PC's output
+Functions for processing port information from MED-PC's output
 
 For more information on the MED-PC's programming language, Trans: 
 - https://www.med-associates.com/wp-content/uploads/2017/01/DOC-003-R3.4-SOF-735-MED-PC-IV-PROGRAMMER%E2%80%99S-MANUAL.pdf
@@ -73,6 +73,32 @@ def get_inside_port_mask(inside_port_numbers, max_time):
     session_time_increments = np.arange(1, max_time+1)
     inside_port_mask = np.isin(session_time_increments, inside_port_numbers)
     return session_time_increments, inside_port_mask
+
+def get_inside_port_probability_averages_for_all_increments(tone_times, inside_port_mask, before_tone_duration=2000, after_tone_duration=2000):
+    """
+    Calculates the average probability that a subject is in the port between sessions. 
+    This is calculated by seeing the ratio that a subject is in the port at a given time increment 
+    that's the same time difference to the tone with all the other sessions. 
+    i.e. The time increment of 10.01 seconds after the tone for all sessions.
+    
+    Args:
+        tone_times: list or Pandas Series
+            - An array of the times that the tone has played
+        inside_port_mask: Numpy Array
+            - The mask where the subject is in the port based on the index being the time increment
+        before_tone_duration: int
+            - The number of increments before the tone to be analyzed
+        after_tone_duration: int
+            - The number of increments after the tone to be analyzed
+    Returns: 
+        Numpy Array
+            - The averages of the probabilities that the subject is inside the port for all increments
+    """
+    result = []
+    for tone_start in tone_times:
+        tone_start_int = int(tone_start)
+        result.append(inside_port_mask[tone_start_int - before_tone_duration: tone_start_int + after_tone_duration])
+    return np.stack(result).mean(axis=0)
 
 def main():
     """
