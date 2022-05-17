@@ -119,7 +119,7 @@ def get_last_port_entries_before_tone(tone_pd_series, port_entries_pd_series, po
             print("Look over value {} at index {}".format(current_tone_time, index))
     return pd.DataFrame.from_dict(last_port_entry_dict, orient="index")
 
-def get_concatted_first_porty_entry_dataframe(concatted_medpc_df, tone_time_column="(S)CSpresentation", \
+def get_concatted_first_porty_entry_after_tone_dataframe(concatted_medpc_df, tone_time_column="(S)CSpresentation", \
         port_entry_column="(P)Portentry", port_exit_column="(N)Portexit", subject_column="subject", date_column="date", \
         stop_with_error=False):
     """
@@ -176,6 +176,64 @@ def get_concatted_first_porty_entry_dataframe(concatted_medpc_df, tone_time_colu
             print("No valid tones for {}".format(file_path))
     # Index repeats itself because it is concatenated with multiple dataframes
     return pd.concat(all_first_port_entry_df).reset_index(drop="True")
+
+def get_concatted_last_porty_entry_before_tone_dataframe(concatted_medpc_df, tone_time_column="(S)CSpresentation", \
+        port_entry_column="(P)Portentry", port_exit_column="(N)Portexit", subject_column="subject", date_column="date", \
+        stop_with_error=False):
+    """
+    Creates dataframes of the time of the tone, and the first port entry after that tone.
+    Along with the corresponding metadata of the path of the file, the date, and the subject.
+    This is created from a dataframe that contains tone times, port entry times, and associated metadata.
+    Which is usually from the extract.dataframe.get_medpc_dataframe_from_list_of_files function 
+
+    Args:
+        concatted_medpc_df: Pandas Dataframe 
+            - Output of extract.dataframe.get_medpc_dataframe_from_list_of_files
+            - Includes tone playing time, port entry time, subject, and date for each recording session
+        tone_time_column: str
+            - Name of the column of concatted_medpc_df that has the array port entry times
+        port_entry_column: str
+            - Name of the column of concatted_medpc_df that has the array port entry times
+        subject_column: str
+            - Name of the column of concatted_medpc_df that has the subject's ID
+        date_column: str
+            - Name of the column of concatted_medpc_df that has the date of the recording
+        stop_with_error: bool
+            - Flag to terminate the program when an error is raised.
+            - Sometimes recordings can be for testing and don't include any valid tone times
+    
+    Returns: 
+        Pandas Dataframe
+            -
+    """
+    # List to combine all the Data Frames at the end
+    all_last_port_entry_df = []
+    for file_path in concatted_medpc_df["file_path"].unique():
+        current_file_df = concatted_medpc_df[concatted_medpc_df["file_path"] == file_path]
+        valid_tones = get_valid_tones(tone_pd_series=current_file_df[tone_time_column])
+        # Sometimes the valid tones do not exist because it was a test recording
+        if not valid_tones.empty:
+            # All the first port entries for each tone            
+            last_port_entry_df = get_last_port_entries_before_tone(tone_pd_series=valid_tones, \
+                port_entries_pd_series=current_file_df[port_entry_column], port_exits_pd_series=current_file_df[port_exit_column])
+            # Adding the metadata as columns
+            last_port_entry_df["file_path"] = file_path
+            # Making sure that there is only one date and subject for all the rows
+            if len(current_file_df[date_column].unique()) == 1 and len(current_file_df[subject_column].unique()) == 1:
+                # This assumes that all the date and subject keys are the same for the file
+                last_port_entry_df[date_column] = current_file_df[date_column].unique()[0]
+                last_port_entry_df[subject_column] = current_file_df[subject_column].unique()[0]
+            elif stop_with_error:
+                raise ValueError("More then one date or subject in {}".format(file_path))
+            else:
+                print("More then one date or subject in {}".format(file_path))
+            all_last_port_entry_df.append(last_port_entry_df)
+        elif valid_tones.empty and stop_with_error:
+            raise ValueError("No valid tones for {}".format(file_path))
+        else:
+            print("No valid tones for {}".format(file_path))
+    # Index repeats itself because it is concatenated with multiple dataframes
+    return pd.concat(all_last_port_entry_df).reset_index(drop="True")
 
 def main():
     """
