@@ -109,7 +109,7 @@ def get_last_port_entries_before_tone(tone_pd_series, port_entries_pd_series, po
             last_port_entry_dict[index]["current_tone_time"] = current_tone_time
             # Getting all the port entries that happened after the tone started
             # And then getting the first one of those port entries
-            last_port_entry_before_tone = port_entries_pd_series[port_entries_pd_series >= current_tone_time].min()
+            last_port_entry_before_tone = port_entries_pd_series[port_entries_pd_series <= current_tone_time].max()
             last_port_entry_dict[index]["last_port_entry_before_tone"] = last_port_entry_before_tone
             # Getting all the port exits that happened after the entery
             # And then getting the first one of those port exits
@@ -120,7 +120,7 @@ def get_last_port_entries_before_tone(tone_pd_series, port_entries_pd_series, po
     return pd.DataFrame.from_dict(last_port_entry_dict, orient="index")
 
 def get_concatted_first_porty_entry_dataframe(concatted_medpc_df, tone_time_column="(S)CSpresentation", \
-        port_entry_column="(P)Portentry", subject_column="subject", date_column="date", \
+        port_entry_column="(P)Portentry", port_exit_column="(N)Portexit", subject_column="subject", date_column="date", \
         stop_with_error=False):
     """
     Creates dataframes of the time of the tone, and the first port entry after that tone.
@@ -156,7 +156,8 @@ def get_concatted_first_porty_entry_dataframe(concatted_medpc_df, tone_time_colu
         # Sometimes the valid tones do not exist because it was a test recording
         if not valid_tones.empty:
             # All the first port entries for each tone            
-            first_port_entry_df = get_first_port_entries_after_tone(tone_pd_series=valid_tones, port_entries_pd_series=current_file_df[port_entry_column])
+            first_port_entry_df = get_first_port_entries_after_tone(tone_pd_series=valid_tones, \
+                port_entries_pd_series=current_file_df[port_entry_column], port_exits_pd_series=current_file_df[port_exit_column])
             # Adding the metadata as columns
             first_port_entry_df["file_path"] = file_path
             # Making sure that there is only one date and subject for all the rows
