@@ -53,6 +53,39 @@ def get_valid_tones(tone_pd_series, drop_1000s=True, dropna=True):
     # Removing all numbers that are after the max tone
     return tone_pd_series
 
+def get_first_port_entries_after_tone(tone_pd_series, port_entries_pd_series, port_exits_pd_series):
+    """
+    From an array of times of tones being played and subject's entries to a port, 
+    finds the first entry immediately after every tone. 
+    Makes a dataframe of tone times to first port entry times
+
+    Args:
+        tone_pd_series: Pandas Series
+            - All the times the tone is being played
+        port_entries_pd_series: Pandas Series
+            - All the times that the port is being entered
+    Returns: 
+        Pandas DataFrame
+            - A dataframe of tone times to first port entry times
+    """
+    # Creating a dictionary of index(current row number we're on) to current/next tone time and first port entry
+    first_port_entry_dict = defaultdict(dict)
+    for index, current_tone_time in tone_pd_series.items():
+        # Using a counter so that we don't go through all the rows that include NaNs
+        try:
+            first_port_entry_dict[index]["current_tone_time"] = current_tone_time
+            # Getting all the port entries that happened after the tone started
+            # And then getting the first one of those port entries
+            first_port_entry_after_tone = port_entries_pd_series[port_entries_pd_series >= current_tone_time].min()
+            first_port_entry_dict[index]["first_port_entry_after_tone"] = first_port_entry_after_tone
+            # Getting all the port exits that happened after the entery
+            # And then getting the first one of those port exits
+            port_exit_after_first_port_entry_after_tone = port_exits_pd_series[port_exits_pd_series > first_port_entry_after_tone].min()
+            first_port_entry_dict[index]["port_exit_after_first_port_entry_after_tone"] = port_exit_after_first_port_entry_after_tone
+        except:
+            print("Look over value {} at index {}".format(current_tone_time, index))
+    return pd.DataFrame.from_dict(first_port_entry_dict, orient="index")
+
 def get_last_port_entries_before_tone(tone_pd_series, port_entries_pd_series, port_exits_pd_series):
     """
     From an array of times of tones being played and subject's entries to a port, 
