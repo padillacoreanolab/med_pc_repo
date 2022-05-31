@@ -10,6 +10,7 @@ dependencies:
   - alsa-lib=1.2.3.2=h166bdaf_0
   - argon2-cffi=21.3.0=pyhd8ed1ab_0
   - argon2-cffi-bindings=21.2.0=py39hb9d737c_2
+  - astroid=2.11.4=py39hf3d152e_0
   - asttokens=2.0.5=pyhd8ed1ab_0
   - attrs=21.4.0=pyhd8ed1ab_0
   - backcall=0.2.0=pyh9f0ad1d_0
@@ -23,11 +24,13 @@ dependencies:
   - ca-certificates=2021.10.8=ha878542_0
   - certifi=2021.10.8=py39hf3d152e_2
   - cffi=1.15.0=py39h4bc2ebd_0
+  - colorama=0.4.4=pyh9f0ad1d_0
   - cycler=0.11.0=pyhd8ed1ab_0
   - dbus=1.13.6=h5008d03_3
   - debugpy=1.6.0=py39h5a03fae_0
   - decorator=5.1.1=pyhd8ed1ab_0
   - defusedxml=0.7.1=pyhd8ed1ab_0
+  - dill=0.3.4=pyhd8ed1ab_0
   - entrypoints=0.4=pyhd8ed1ab_0
   - et_xmlfile=1.0.1=py_1001
   - executing=0.8.3=pyhd8ed1ab_0
@@ -46,6 +49,7 @@ dependencies:
   - ipykernel=6.13.0=py39hef51801_0
   - ipython=8.3.0=py39hf3d152e_0
   - ipython_genutils=0.2.0=py_1
+  - isort=5.10.1=pyhd8ed1ab_0
   - jbig=2.1=h7f98852_2003
   - jedi=0.18.1=py39hf3d152e_1
   - jinja2=3.1.1=pyhd8ed1ab_0
@@ -57,6 +61,7 @@ dependencies:
   - keyutils=1.6.1=h166bdaf_0
   - kiwisolver=1.4.2=py39hf939315_1
   - krb5=1.19.3=h3790be6_0
+  - lazy-object-proxy=1.7.1=py39hb9d737c_1
   - lcms2=2.12=hddcbb42_0
   - ld_impl_linux-64=2.36.1=hea4e1c9_2
   - lerc=3.0=h9c3ff4c_0
@@ -100,6 +105,7 @@ dependencies:
   - matplotlib=3.5.2=py39hf3d152e_0
   - matplotlib-base=3.5.2=py39h700656a_0
   - matplotlib-inline=0.1.3=pyhd8ed1ab_0
+  - mccabe=0.7.0=pyhd8ed1ab_0
   - mistune=0.8.4=py39h3811e60_1005
   - munkres=1.1.4=pyh9f0ad1d_0
   - mysql-common=8.0.29=haf5c9bc_0
@@ -127,6 +133,7 @@ dependencies:
   - pickleshare=0.7.5=py_1003
   - pillow=9.1.0=py39hae2aec6_2
   - pip=22.0.4=pyhd8ed1ab_0
+  - platformdirs=2.5.1=pyhd8ed1ab_0
   - prometheus_client=0.14.1=pyhd8ed1ab_0
   - prompt-toolkit=3.0.29=pyha770c72_0
   - psutil=5.9.0=py39hb9d737c_1
@@ -135,6 +142,7 @@ dependencies:
   - pure_eval=0.2.2=pyhd8ed1ab_0
   - pycparser=2.21=pyhd8ed1ab_0
   - pygments=2.12.0=pyhd8ed1ab_0
+  - pylint=2.13.8=pyhd8ed1ab_0
   - pyparsing=3.0.8=pyhd8ed1ab_0
   - pyqt=5.12.3=py39hf3d152e_8
   - pyqt-impl=5.12.3=py39hde8b62d_8
@@ -158,13 +166,17 @@ dependencies:
   - terminado=0.13.3=py39hf3d152e_1
   - tinycss2=1.1.1=pyhd8ed1ab_0
   - tk=8.6.12=h27826a3_0
+  - tomli=2.0.1=pyhd8ed1ab_0
   - tornado=6.1=py39hb9d737c_3
   - traitlets=5.1.1=pyhd8ed1ab_0
+  - typing-extensions=4.2.0=hd8ed1ab_1
+  - typing_extensions=4.2.0=pyha770c72_1
   - tzdata=2022a=h191b570_0
   - unicodedata2=14.0.0=py39hb9d737c_1
   - wcwidth=0.2.5=pyh9f0ad1d_2
   - webencodings=0.5.1=py_1
   - wheel=0.37.1=pyhd8ed1ab_0
+  - wrapt=1.14.1=py39hb9d737c_0
   - xorg-libxau=1.0.9=h7f98852_0
   - xorg-libxdmcp=1.1.3=h7f98852_0
   - xz=5.2.5=h516909a_1
@@ -173,7 +185,6 @@ dependencies:
   - zlib=1.2.11=h166bdaf_1014
   - zstd=1.5.2=ha95c52a_0
   - pip:
-    - dill==0.3.4
     - medpc2excel==3.10.0
     - pandas==1.4.2
     - pytz==2022.1
