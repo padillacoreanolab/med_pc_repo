@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 # Moving to the root directory of the Github repo
-git_top_level="$(git rev-parse --show-toplevel)"
-cd $(git_top_level)
+cd $(git rev-parse --show-toplevel)
 
 # Creating the Conda environment
 conda create --prefix ./bin/conda_environments/env/med_pc_env python=3.9 --yes
