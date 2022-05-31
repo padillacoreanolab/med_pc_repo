@@ -4,13 +4,13 @@
 
 ## Repository Organization
 
-- (./bin)[./bin]
+- [./bin](./bin)
     - Directory that has the relevant documents and files for the Conda environments
-- (./jupyter_notebooks)[./jupyter_notebooks]
+- [./jupyter_notebooks](./jupyter_notebooks)
     - Directory that has the Jupyter Notebooks to extract/process the MED-PC and the accompanying dataframes/plots that are created from it
-- (./results)[./results]
+- [./results](./results)
     - Directory that has a record of previous iterations of the Jupyter Notebooks 
-- (./src)[./src]
+- [./src](./src)
     - Directory that has the Python source code used in the Jupyter Notebooks. All the original functions used in the notebooks will be imported from this.
 
 ## Steps To Take
