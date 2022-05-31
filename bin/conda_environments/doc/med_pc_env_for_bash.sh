@@ -14,3 +14,6 @@ conda install -c conda-forge openpyxl --yes
 conda install -c conda-forge notebook --yes
 conda install -c conda-forge matplotlib --yes
 conda install -c conda-forge pylint --yes
+
+# Running Jupyter Notebooks
+jupyter notebook --allow-root
