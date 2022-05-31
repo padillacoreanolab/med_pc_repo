@@ -2,16 +2,20 @@
 
 ## Overview TODO Edit
 
-## Repository Organization TODO Edit
+## Repository Organization
 
-- med_pc_repo/bin
-- med_pc_repo/jupyter_notebooks
-- med_pc_repo/results
-- med_pc_repo/src
+- (./bin)[./bin]
+    - Directory that has the relevant documents and files for the Conda environments
+- (./jupyter_notebooks)[./jupyter_notebooks]
+    - Directory that has the Jupyter Notebooks to extract/process the MED-PC and the accompanying dataframes/plots that are created from it
+- (./results)[./results]
+    - Directory that has a record of previous iterations of the Jupyter Notebooks 
+- (./src)[./src]
+    - Directory that has the Python source code used in the Jupyter Notebooks. All the original functions used in the notebooks will be imported from this.
 
 ## Steps To Take
 
-Step 0. Clone this repository 
+### Step 0. Clone this repository 
 - Check if you have the Git program on your computer. Do this on the Bash terminal(Linux), Powershell(Windows), and Terminal(Mac). In the terminal, type `git` then enter. 
     - If you don't have Git on your computer, install it following these instructions: https://git-scm.com/downloads
 - Once you have Git, download the repository in a folder that you want to save it in
@@ -20,7 +24,7 @@ Step 0. Clone this repository
     - `cd {./path/to}/med_pc_repo`
     - `git pull origin main`
 
-Step 1. Create Conda environment to install necessary Python libraries
+### Step 1. Create Conda Environment to Install Necessary Python libraries
 - Check if you have Anaconda:
     - Use the `python` command in your terminal. If you have Anaconda, then it will say "Anaconda" somewhere in the output.
     - If you don't have Anaconda, follow the installation instructions on: https://www.anaconda.com/ 
@@ -29,13 +33,15 @@ Step 1. Create Conda environment to install necessary Python libraries
     - `conda deactivate`
     - `conda activate {./path/to}/med_pc_repo/bin/conda_environments/env/med_pc_env`
 
-Step 2. Turn on Jupyter Notebooks
+### Step 2. Turn on Jupyter Notebooks Program
 - 1 Use the command `jupyter notebook --allow-root` in your terminal
 - 1.1 If a browser window doesn't pop up with Jupyter notebooks, open up a browser window. Then copy and paste the URL given in the command line. It will be followed by `To access the notebook, open this file in a browser:` and `Or copy and paste one of these URLs:`
     - It should have a format similar to: `http://localhost:8888/?token=gsOH0vx373NRzHUmDzwX9TFzBf5Wx6czWIr1irV7ERKBLmlK`
 - 2 Click on [./jupyter_notebooks](./jupyter_notebooks) in the Jupyter Notebooks GUI (Should be in the web browser)
 
-Step 3. Follow the instructions to run the Jupyter Notebooks at [./jupyter_notebooks/README.MD](./jupyter_notebooks/README.MD)
+### Step 3. Run each Data Processing/Analysis Jupyter Notebooks
+- Follow the instructions to run the Jupyter Notebooks at [./jupyter_notebooks/README.MD](./jupyter_notebooks/README.MD)
+- The dataframes and the plots should be saved in subdirectories in: (./jupyter_notebooks/data)[./jupyter_notebooks/data]
 
 ## Resources
 
