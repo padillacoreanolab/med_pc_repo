@@ -1,9 +1,9 @@
 # MED-PC Data Analysis
 
-## Overview TODO Edit
+## Overview 
+- This project helps extract and process MED-PC (https://www.med-associates.com/med-pc-v/) recording data. The overall goal is to train mice to associate a tone with a reward(sugary liquid). MED-PC records the times that the tones are played, when the mice enter/exit the port where the reward is dispensed, and the relevant metadata. The experiment is usually run with one subject for a recording that takes about a hour for multiple days. The data processing will calculate various metrics that displays or averages all the trials(each tone going off in a session and it's associated port entry/exit) for each recording session for all the subjects.
 
 ## Repository Organization
-
 - [./bin](./bin)
     - Directory that has the relevant documents and files for the Conda environments
 - [./jupyter_notebooks](./jupyter_notebooks)
