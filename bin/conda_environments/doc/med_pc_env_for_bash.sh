@@ -14,6 +14,8 @@ pip install medpc2excel
 conda install -c conda-forge openpyxl --yes
 conda install -c conda-forge notebook --yes
 conda install -c conda-forge matplotlib --yes
+conda install -c conda-forge moviepy --yes
+conda install -c cogsci pygame --yes
 
 # Running Jupyter Notebooks
 jupyter notebook --allow-root
